@@ -32,6 +32,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import javax.xml.bind.DatatypeConverter;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
@@ -66,10 +67,11 @@ public class BinanceRequest {
 
     // HMAC encoding
     public static String encode(String key, String data) throws Exception {
+        String keyString = data;
         Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
         SecretKeySpec secret_key = new SecretKeySpec(key.getBytes("UTF-8"), "HmacSHA256");
         sha256_HMAC.init(secret_key);
-        return Hex.encodeHexString(sha256_HMAC.doFinal(data.getBytes("UTF-8")));
+        return DatatypeConverter.printHexBinary(sha256_HMAC.doFinal(keyString.getBytes()));
     }
 
     /**
